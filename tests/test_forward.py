@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import unittest
+
 import chainer
 import chainer.functions as F
 import chainer.links as L
 import numpy as np
 import tfchain
-import unittest
 
 
 class TestForward(unittest.TestCase):
@@ -25,4 +26,4 @@ class TestForward(unittest.TestCase):
         y = self.model.l2(h)
         assert y.shape == (self.b, self.n)
 
-        # session = tfchain.session.get_session()
+        sess = tfchain.session.get_session()
