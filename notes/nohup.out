@@ -1,0 +1,31 @@
+[W 09:46:20.597 NotebookApp] Unrecognized JSON config file version, assuming version 1
+[I 09:46:21.664 NotebookApp] [nb_conda_kernels] enabled, 1 kernels found
+[I 09:46:21.699 NotebookApp] Writing notebook server cookie secret to /Users/saito/Library/Jupyter/runtime/notebook_cookie_secret
+[I 09:46:22.187 NotebookApp] The port 8888 is already in use, trying another port.
+[I 09:46:22.464 NotebookApp] [nb_conda] enabled
+[I 09:46:22.697 NotebookApp] [nb_anacondacloud] enabled
+[I 09:46:23.356 NotebookApp] ✓ nbpresent HTML export ENABLED
+[W 09:46:23.356 NotebookApp] ✗ nbpresent PDF export DISABLED: No module named 'nbbrowserpdf'
+[I 09:46:23.364 NotebookApp] Serving notebooks from local directory: /Users/saito/Codes/tfchain/notes
+[I 09:46:23.364 NotebookApp] 0 active kernels 
+[I 09:46:23.365 NotebookApp] The Jupyter Notebook is running at: http://localhost:8889/
+[I 09:46:23.365 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[I 09:46:32.250 NotebookApp] Creating new notebook in 
+[I 09:46:32.261 NotebookApp] Writing notebook-signing key to /Users/saito/Library/Jupyter/notebook_secret
+[I 09:46:33.691 NotebookApp] Kernel started: d88ac06a-042c-4393-9814-062cd8f744ff
+[W 09:46:33.716 NotebookApp] 404 GET /nbextensions/nbpresent/js/nbpresent.deps.min.js.js (::1) 21.72ms referer=http://localhost:8889/notebooks/Untitled.ipynb?kernel_name=Python%20[Root]
+[W 09:46:33.719 NotebookApp] 404 GET /kernelspecs/Python%20[Root]/logo-64x64.png (::1) 2.23ms referer=http://localhost:8889/notebooks/Untitled.ipynb?kernel_name=Python%20[Root]
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcublas.dylib locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcudnn.dylib locally
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcufft.dylib locally
+I tensorflow/stream_executor/dso_loader.cc:105] Couldn't open CUDA library libcuda.1.dylib. LD_LIBRARY_PATH: /Users/saito/torch/install/lib:/Users/saito/.pyenv/versions/anaconda3-4.1.0/bin/python/../../lib::/usr/local/cuda/lib
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:160] hostname: mitmul-mbp.local
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:185] libcuda reported version is: Not found: was unable to find libcuda.so DSO loaded into this program
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:189] kernel reported version is: Invalid argument: expected %d.%d or %d.%d.%d form for driver version; got ""
+I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1080] LD_LIBRARY_PATH: /Users/saito/torch/install/lib:/Users/saito/.pyenv/versions/anaconda3-4.1.0/bin/python/../../lib::/usr/local/cuda/lib
+I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1081] failed to find libcuda.so on this system: Failed precondition: could not dlopen DSO: libcuda.1.dylib; dlerror: dlopen(libcuda.1.dylib, 5): no suitable image found.  Did find:
+	/Users/saito/.pyenv/versions/anaconda3-4.1.0/bin/python/../../lib/libcuda.1.dylib: stat() failed with errno=20
+	/Users/saito/.pyenv/versions/anaconda3-4.1.0/bin/python/../../lib/libcuda.1.dylib: stat() failed with errno=20
+	/Users/saito/.pyenv/versions/anaconda3-4.1.0/bin/python/../../lib/libcuda.1.dylib: stat() failed with errno=20
+I tensorflow/stream_executor/dso_loader.cc:111] successfully opened CUDA library libcurand.dylib locally
+[I 09:48:33.593 NotebookApp] Saving file at /TensorFlow Test.ipynb
