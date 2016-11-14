@@ -1,5 +1,6 @@
-rf-chain
-========
+# rf-chain
+
+Alternative Chain implementation for TensorFlow backend
 
 # Requirements
 
@@ -32,4 +33,3 @@ To deactivate the environmen, use:
 source deactivate tensorflow
 ```
 
-##
