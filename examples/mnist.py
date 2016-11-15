@@ -35,12 +35,18 @@ class LeNet5(chainer.Chain):
 if __name__ == '__main__':
     model = LeNet5()
     train, valid = get_mnist(ndim=3)
+    batchsize = 32
+    for epoch in range(10):
+        for i in range(0, len(train), batchsize):
+            x, t = [], []
+            for d in train[i:i + batchsize]:
+                x.append(d[0])
+                t.append(d[1])
+            x = chainer.Variable(np.array(x, dtype=np.float32))
+            t = chainer.Variable(np.array(t, dtype=np.int32))
 
-    x, t = [], []
-    for d in train[0:32]:
-        x.append(d[0])
-        t.append(d[1])
-    x = chainer.Variable(np.array(x, dtype=np.float32))
-    t = chainer.Variable(np.array(t, dtype=np.int32))
+            y = model(x)
+            print(y[0])
 
-    y = model(x)
+    if hasattr(model, 'session'):
+        model.session.close()

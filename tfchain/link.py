@@ -19,14 +19,14 @@ class Link(object):
                 if isinstance(param, cupy.ndarray):
                     with cuda.Device(param.device):
                         params[name] = cuda.to_cpu(param)
-                # Convert to tf.Variable
-                setattr(self, name, tf.Variable(params[name]))
+                # Convert to tf.Tensor
+                setattr(self, name, tf.constant(params[name]))
 
         # When given W, b explicitly as Variables
         elif len(args) == 2 and isinstance(args[0], chainer.Variable) \
                 and isinstance(args[1], chainer.Variable):
-            setattr(self, 'W', tf.Variable(args[0].data))
-            setattr(self, 'b', tf.Variable(args[1].data))
+            setattr(self, 'W', tf.constant(args[0].data))
+            setattr(self, 'b', tf.constant(args[1].data))
 
         else:
             raise TypeError('Wrong number of arguments. {}'.format(args))
@@ -40,7 +40,7 @@ class Link(object):
         if hasattr(x, 'ndim') and x.ndim == 4:
             x = x.transpose(0, 2, 3, 1)  # to NHWC
         if isinstance(x, np.ndarray):
-            x = tf.Variable(x)
+            x = tf.constant(x)
         return self.forward(x)
 
     def forward(self, x):

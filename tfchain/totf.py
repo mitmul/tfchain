@@ -1,3 +1,4 @@
+from operator import itemgetter as ig
 from tfchain import session
 
 import chainer
@@ -11,6 +12,9 @@ import tfchain.links as L
 def totf(forward):
 
     def f(model, x):
+        feed_x = x.data.transpose(0, 2, 3, 1) if x.ndim == 4 else x.data
+        input_x = tf.Variable(feed_x)
+
         if not hasattr(model, 'tf_graph'):
             y = forward(model, x)
             cand_funcs = []
@@ -28,9 +32,9 @@ def totf(forward):
             while cand_funcs:
                 _, _, func = heapq.heappop(cand_funcs)
                 comp_graph.append((func, func.inputs[1:]))
-                for input_x in func.inputs:
-                    if input_x.creator is not None:
-                        add_cand(input_x.creator)
+                for func_x in func.inputs:
+                    if func_x.creator is not None:
+                        add_cand(func_x.creator)
 
             model.tf_graph = []
             for link, param in reversed(comp_graph):
@@ -48,22 +52,20 @@ def totf(forward):
                 elif label == 'ReLU':
                     model.tf_graph.append(F.ReLU())
 
-        for f in model.tf_graph:
-            if isinstance(f, L.Linear):
-                if isinstance(x, tf.Tensor):
-                    shape = x.get_shape()
-                    x = tf.reshape(x, (int(shape[0]), int(np.prod(shape[1:]))))
-                elif isinstance(x, chainer.Variable):
-                    shape = x.shape
-                    x = x.reshape((shape[0], np.prod(shape[1:])))
-
-            x = f(x)
+            y = input_x
+            for f in model.tf_graph:
+                y = f(y)
+            model.op = y
 
         if not hasattr(model, 'session'):
-            sess = session.get_session()
-            sess.run(tf.initialize_all_variables())
-            model.session = sess
+            model.session = session.get_session()
+            model.session.run(tf.initialize_all_variables())
 
-        return model.session.run(x)
+        if isinstance(x, chainer.Variable):
+            x = x.data
+        if hasattr(x, 'ndim') and x.ndim == 4:
+            x = x.transpose(0, 2, 3, 1)  # to NHWC
+
+        return model.session.run(model.op, feed_dict={input_x: feed_x})
 
     return f
