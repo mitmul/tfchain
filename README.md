@@ -58,6 +58,19 @@ class LeNet5(chainer.Chain):
 
 Don't miss the `@totf` decorator right before the `__call__` method definition.
 
+Then, just give a `chainer.Variable` to the model object as usual, it runs on TensorFlow.
+
+```
+x = ...  # Prepare the input variable as a numpy array
+model = LeNet5()
+x = chainer.Variable(x)
+y = model(x)  # It's performed with TensorFlow!
+```
+
+The returned value `y` will be a numpy array.
+
+## Visualization
+
 To visualize your Chainer model using tensorboard, just adding the below line following the model forward calculation part:
 
 ```
@@ -74,8 +87,8 @@ where the path `$PWD` should have `data` dir.
 
 Then go to `GRAPHS` tag, and enjoy the visualized graph.
 
-## Chainer model visualizations
+### Chainer model visualization examples
 
-| LeNet5 | VGG16 |
-|--------|-------|
-|![](data/LeNet5.png)|![](data/VGG16.png)|
+LeNet5               | VGG16
+-------------------- | -------------------
+![](data/LeNet5.png) | ![](data/VGG16.png)
