@@ -1,4 +1,4 @@
-# rf-chain
+# tfchain
 
 Alternative Chain implementation with TensorFlow backend
 
@@ -28,3 +28,23 @@ nosetests -s tests
 ```
 python examples/mnist.py
 ```
+
+# Usage
+
+Just give a decorator `@totf` to the member function `__call__` of your model class that inherits from `chainer.Chain`. See `examples/mnist.py` and `examples/vgg16.py`.
+
+To visualize your Chainer model using tensorboard, just adding the below line following the model forward calculation part:
+
+```
+tf.train.SummaryWriter('data', graph=model.session.graph)
+```
+
+It creates `data` dir, so at the place the dir created, just launch tensorboard:
+
+```
+$ tensorboard --logdir=$PWD
+```
+
+where the path `$PWD` should have `data` dir.
+
+Then go to `GRAPHS` tag, and enjoy the visualized graph.
