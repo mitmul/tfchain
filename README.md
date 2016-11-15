@@ -31,7 +31,32 @@ python examples/mnist.py
 
 # Usage
 
-Just give a decorator `@totf` to the member function `__call__` of your model class that inherits from `chainer.Chain`. See `examples/mnist.py` and `examples/vgg16.py`.
+Just give a decorator `@totf` to the member function `__call__` of your model class that inherits from `chainer.Chain`. The following example is from `examples/mnist.py`, and it shows how to use TensorFlow for all computations performed inside the `__call__` function:
+
+```
+class LeNet5(chainer.Chain):
+
+    def __init__(self):
+        super(LeNet5, self).__init__(
+            conv1=L.Convolution2D(1, 6, 5),
+            conv2=L.Convolution2D(6, 16, 5),
+            fc3=L.Linear(None, 120),
+            fc4=L.Linear(120, 84),
+            fc5=L.Linear(84, 10)
+        )
+        self.train = True
+
+    @totf
+    def __call__(self, x):
+        h = F.max_pooling_2d(F.relu(self.conv1(x)), 2, 2)
+        h = F.max_pooling_2d(F.relu(self.conv2(h)), 2, 2)
+        h = F.relu(self.fc3(h))
+        h = F.relu(self.fc4(h))
+        h = self.fc5(h)
+        return h
+```
+
+Don't miss the `@totf` decorator right before the `__call__` method definition.
 
 To visualize your Chainer model using tensorboard, just adding the below line following the model forward calculation part:
 
