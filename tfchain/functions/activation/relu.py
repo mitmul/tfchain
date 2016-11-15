@@ -9,4 +9,5 @@ class ReLU(tfchain.Function):
 
 
 def relu(x):
-    return ReLU()(x)
+    with tf.name_scope('ReLU', values=[x]):
+        return ReLU()(x)

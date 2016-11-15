@@ -24,7 +24,6 @@ class LeNet5(chainer.Chain):
 
     @totf
     def __call__(self, x):
-        print('ORIGINAL FUNC IS CALLED')
         h = F.max_pooling_2d(F.relu(self.conv1(x)), 2, 2)
         h = F.max_pooling_2d(F.relu(self.conv2(h)), 2, 2)
         h = F.relu(self.fc3(h))
@@ -48,6 +47,8 @@ if __name__ == '__main__':
 
             y = model(x)
             print(y)
+            break
+        break
 
     tf.train.SummaryWriter('data', graph=model.session.graph)
 

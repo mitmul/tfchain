@@ -28,7 +28,8 @@ class MaxPooling2D(tfchain.Function):
             self.pad = 'SAME'
 
     def forward(self, x):
-        return tf.nn.max_pool(x, self.ksize, self.stride, self.pad)
+        with tf.name_scope('MaxPooling2D', values=[x]):
+            return tf.nn.max_pool(x, self.ksize, self.stride, self.pad)
 
 
 def max_pooling_2d(x, ksize, stride=None, pad=0):

@@ -23,4 +23,5 @@ class Convolution2D(tfchain.Link):
             self.pad = 'SAME'
 
     def forward(self, x):
-        return tf.nn.conv2d(x, self.W, self.stride, self.pad) + self.b
+        with tf.name_scope('Convolution2D', values=[x, self.W, self.b]):
+            return tf.nn.conv2d(x, self.W, self.stride, self.pad) + self.b

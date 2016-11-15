@@ -16,4 +16,5 @@ class Linear(tfchain.Link):
         elif isinstance(x, chainer.Variable):
             shape = x.shape
             x = x.reshape((shape[0], np.prod(shape[1:])))
-        return tf.matmul(x, self.W) + self.b
+        with tf.name_scope('Linear', values=[x, self.W, self.b]):
+            return tf.matmul(x, self.W) + self.b

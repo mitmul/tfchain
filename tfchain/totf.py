@@ -50,10 +50,9 @@ def totf(forward):
                 elif label == 'LinearFunction':
                     model.tf_graph.append(L.Linear(*param))
                 elif label == 'MaxPooling2D':
-                    ksize = (link.kh, link.kw)
-                    stride = (link.sy, link.sx)
-                    pad = (link.ph, link.pw)
-                    model.tf_graph.append(F.MaxPooling2D(ksize, stride, pad))
+                    model.tf_graph.append(F.MaxPooling2D(
+                        (link.kh, link.kw), (link.sy, link.sx),
+                        (link.ph, link.pw)))
                 elif label == 'ReLU':
                     model.tf_graph.append(F.ReLU())
 
@@ -66,7 +65,6 @@ def totf(forward):
             model.session = session.get_session()
             model.session.run(tf.initialize_all_variables())
 
-        print(feed_x.shape, feed_x.dtype)
         return model.session.run(model.op, feed_dict={model.input_x: feed_x})
 
     return f
