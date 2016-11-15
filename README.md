@@ -1,6 +1,6 @@
 # rf-chain
 
-Alternative Chain implementation for TensorFlow backend
+Alternative Chain implementation with TensorFlow backend
 
 # Requirements
 
@@ -21,4 +21,10 @@ pip install --upgrade $TF_BINARY_URL
 
 ```
 nosetests -s tests
+```
+
+# Run a MNIST example
+
+```
+python examples/mnist.py
 ```

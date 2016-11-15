@@ -1,9 +1,8 @@
-from chainer import cuda
-
 import chainer
 import cupy
 import numpy as np
 import tensorflow as tf
+from chainer import cuda
 
 
 class Function(object):
@@ -17,7 +16,7 @@ class Function(object):
         if hasattr(x, 'ndim') and x.ndim == 4:
             x = x.transpose(0, 2, 3, 1)  # to NHWC
         if isinstance(x, np.ndarray):
-            x = tf.constant(x)
+            x = tf.Variable(x)
         return self.forward(x)
 
     def forward(self, x):

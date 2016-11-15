@@ -1,35 +1,30 @@
-from chainer import cuda
+import os
 
 import chainer
+import chainer.functions as F
 import cupy
 import numpy as np
-import os
 import tensorflow as tf
+from chainer import cuda
 
 
 class Link(object):
 
-    def __init__(self, *args):
-        # When given a link
-        if len(args) == 1 and isinstance(args[0], chainer.Link):
-            params = dict([(os.path.basename(p[0]), p[1].data)
-                           for p in args[0].namedparams()])
-            for name, param in params.items():
-                # Move to CPU
-                if isinstance(param, cupy.ndarray):
-                    with cuda.Device(param.device):
-                        params[name] = cuda.to_cpu(param)
-                # Convert to tf.Tensor
-                setattr(self, name, tf.constant(params[name]))
+    def __init__(self, W, b):
+        assert isinstance(W, chainer.Variable)
+        assert isinstance(b, chainer.Variable)
 
-        # When given W, b explicitly as Variables
-        elif len(args) == 2 and isinstance(args[0], chainer.Variable) \
-                and isinstance(args[1], chainer.Variable):
-            setattr(self, 'W', tf.constant(args[0].data))
-            setattr(self, 'b', tf.constant(args[1].data))
-
+        if W.ndim == 4:
+            # When it's convolution kernel
+            W = F.transpose(W, axes=(2, 3, 1, 0))
+        elif W.ndim == 2:
+            # When it's affine matrix
+            W = F.transpose(W)
         else:
-            raise TypeError('Wrong number of arguments. {}'.format(args))
+            raise TypeError('Unsupported shape of input W: {}'.format(W.shape))
+
+        setattr(self, 'W', tf.Variable(W.data, name='W'))
+        setattr(self, 'b', tf.Variable(b.data, name='b'))
 
     def __call__(self, x):
         if isinstance(x, chainer.Variable):
@@ -40,7 +35,7 @@ class Link(object):
         if hasattr(x, 'ndim') and x.ndim == 4:
             x = x.transpose(0, 2, 3, 1)  # to NHWC
         if isinstance(x, np.ndarray):
-            x = tf.constant(x)
+            x = tf.Variable(x)
         return self.forward(x)
 
     def forward(self, x):

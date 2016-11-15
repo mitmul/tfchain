@@ -1,21 +1,26 @@
+import heapq
 from operator import itemgetter as ig
-from tfchain import session
 
 import chainer
-import heapq
 import numpy as np
 import tensorflow as tf
 import tfchain.functions as F
 import tfchain.links as L
+from tfchain import session
 
 
 def totf(forward):
 
     def f(model, x):
-        feed_x = x.data.transpose(0, 2, 3, 1) if x.ndim == 4 else x.data
-        input_x = tf.Variable(feed_x)
+        feed_x = x.data
+        if x.ndim == 4:
+            feed_x = feed_x.transpose(0, 2, 3, 1)
+            shape = feed_x.shape
+        else:
+            shape = x.shape
 
         if not hasattr(model, 'tf_graph'):
+            model.input_x = tf.placeholder(x.dtype, shape)
             y = forward(model, x)
             cand_funcs = []
             comp_graph = []
@@ -52,7 +57,7 @@ def totf(forward):
                 elif label == 'ReLU':
                     model.tf_graph.append(F.ReLU())
 
-            y = input_x
+            y = model.input_x
             for f in model.tf_graph:
                 y = f(y)
             model.op = y
@@ -61,11 +66,7 @@ def totf(forward):
             model.session = session.get_session()
             model.session.run(tf.initialize_all_variables())
 
-        if isinstance(x, chainer.Variable):
-            x = x.data
-        if hasattr(x, 'ndim') and x.ndim == 4:
-            x = x.transpose(0, 2, 3, 1)  # to NHWC
-
-        return model.session.run(model.op, feed_dict={input_x: feed_x})
+        print(feed_x.shape, feed_x.dtype)
+        return model.session.run(model.op, feed_dict={model.input_x: feed_x})
 
     return f

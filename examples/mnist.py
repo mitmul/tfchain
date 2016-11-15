@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from chainer.datasets import get_mnist
-from tfchain import totf
-
 import chainer
 import chainer.functions as F
 import chainer.links as L
 import numpy as np
+import tensorflow as tf
+from chainer.datasets import get_mnist
+from tfchain import totf
 
 
 class LeNet5(chainer.Chain):
@@ -24,6 +24,7 @@ class LeNet5(chainer.Chain):
 
     @totf
     def __call__(self, x):
+        print('ORIGINAL FUNC IS CALLED')
         h = F.max_pooling_2d(F.relu(self.conv1(x)), 2, 2)
         h = F.max_pooling_2d(F.relu(self.conv2(h)), 2, 2)
         h = F.relu(self.fc3(h))
@@ -46,7 +47,9 @@ if __name__ == '__main__':
             t = chainer.Variable(np.array(t, dtype=np.int32))
 
             y = model(x)
-            print(y[0])
+            print(y)
+
+    tf.train.SummaryWriter('data', graph=model.session.graph)
 
     if hasattr(model, 'session'):
         model.session.close()
