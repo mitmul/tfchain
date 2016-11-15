@@ -14,7 +14,7 @@ class Function(object):
         if isinstance(x, cupy.ndarray):
             with cuda.Device(x.device):
                 x = cuda.to_cpu(x)
-        if x.ndim == 4:
+        if hasattr(x, 'ndim') and x.ndim == 4:
             x = x.transpose(0, 2, 3, 1)  # to NHWC
         if isinstance(x, np.ndarray):
             x = tf.Variable(x)

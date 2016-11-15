@@ -15,12 +15,22 @@ class TestLinear(unittest.TestCase):
 
     def setUp(self):
         self.clinear = cL.Linear(100, 10)
-        self.tlinear = tL.Linear(self.clinear)
 
-    def test_forward(self):
+    def test_link_forward(self):
+        tlinear = tL.Linear(self.clinear)
         x = np.random.rand(1, 100).astype(np.float32)
         cy = self.clinear(x).data
-        ty = self.tlinear(x)
+        ty = tlinear(x)
+        sess = get_session()
+        sess.run(tf.initialize_all_variables())
+        ty = ty.eval(session=sess)
+        testing.assert_allclose(ty, cy)
+
+    def test_param_forward(self):
+        tlinear = tL.Linear(self.clinear.W, self.clinear.b)
+        x = np.random.rand(1, 100).astype(np.float32)
+        cy = self.clinear(x).data
+        ty = tlinear(x)
         sess = get_session()
         sess.run(tf.initialize_all_variables())
         ty = ty.eval(session=sess)

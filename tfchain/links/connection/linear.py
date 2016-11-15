@@ -1,14 +1,13 @@
-from chainer import cuda
-
 import tensorflow as tf
 import tfchain
 
 
 class Linear(tfchain.Link):
 
-    def __init__(self, link):
-        super(Linear, self).__init__(link)
+    def __init__(self, *args):
+        super(Linear, self).__init__(*args)
 
     def forward(self, x):
-        W = tf.transpose(self.params['W'])
-        return tf.matmul(x, W) + self.params['b']
+        print(self.W.get_shape())
+        print(self.b.get_shape())
+        return tf.matmul(x, tf.transpose(self.W)) + self.b

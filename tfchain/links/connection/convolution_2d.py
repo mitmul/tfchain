@@ -1,3 +1,4 @@
+import chainer
 import numpy as np
 import tensorflow as tf
 import tfchain
@@ -5,26 +6,35 @@ import tfchain
 
 class Convolution2D(tfchain.Link):
 
-    def __init__(self, link):
-        super(Convolution2D, self).__init__(link)
-        self.params['W'] = tf.transpose(self.params['W'], perm=[2, 3, 1, 0])
-        self.params['b'] = self.params['b'][
-            np.newaxis, np.newaxis, np.newaxis, :]
+    def __init__(self, *args):
+        if len(args) == 1:
+            super(Convolution2D, self).__init__(*args)
+        if len(args) == 4:
+            super(Convolution2D, self).__init__(*args[:2])
+        self.W = tf.transpose(self.W, perm=[2, 3, 1, 0])
+        self.b = self.b[np.newaxis, np.newaxis, np.newaxis, :]
 
-        assert isinstance(link.pad, tuple) or isinstance(link.pad, int)
-        if link.pad == (0, 0) or link.pad == 0:
-            self.pad = 'VALID'
-        else:
-            self.pad = 'SAME'
+        def convert_stride(stride):
+            if isinstance(stride, int):
+                self.stride = [1, stride, stride, 1]
+            elif isinstance(stride, tuple) and len(stride) == 2:
+                self.stride = [1] + list(stride) + [1]
+            else:
+                raise AttributeError('Unknown data type of args.stride')
 
-        if isinstance(link.stride, int):
-            self.stride = [1, link.stride, link.stride, 1]
-        elif isinstance(link.stride, tuple) and len(link.stride) == 2:
-            self.stride = [1] + list(link.stride) + [1]
-        else:
-            raise AttributeError('Unknown data type of link.stride')
+        def convert_pad(pad):
+            assert isinstance(pad, tuple) or isinstance(pad, int)
+            if pad == (0, 0) or pad == 0:
+                self.pad = 'VALID'
+            else:
+                self.pad = 'SAME'
+
+        if len(args) == 1 and isinstance(args[0], chainer.Link):
+            convert_stride(args[0].stride)
+            convert_pad(args[0].pad)
+        elif len(args) == 4:
+            convert_stride(args[2])
+            convert_pad(args[3])
 
     def forward(self, x):
-        h = tf.nn.conv2d(x, self.params['W'], self.stride, self.pad)
-        h = h + self.params['b']
-        return h
+        return tf.nn.conv2d(x, self.W, self.stride, self.pad) + self.b

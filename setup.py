@@ -22,6 +22,7 @@ setup(name='tfchain',
           'tfchain.links.connection',
           'tfchain.functions',
           'tfchain.functions.activation',
+          'tfchain.functions.pooling',
       ],
       install_requires=install_requires,
       )
