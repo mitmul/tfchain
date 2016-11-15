@@ -48,3 +48,9 @@ $ tensorboard --logdir=$PWD
 where the path `$PWD` should have `data` dir.
 
 Then go to `GRAPHS` tag, and enjoy the visualized graph.
+
+## Chainer model visualizations
+
+| LeNet5 | VGG16 |
+|--------|-------|
+|![](data/LeNet5.png)|![](data/VGG16.png)|

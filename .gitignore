@@ -7,7 +7,6 @@
 *.meta
 *.out
 checkpoint
-data
 notes
 
 # Byte-compiled / optimized / DLL files
