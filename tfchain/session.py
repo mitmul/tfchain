@@ -10,7 +10,7 @@ def get_session():
     if session is None:
         if _SESSION is None:
             n_threads = os.environ.get('OMP_NUM_THREADS')
-            if n_threads is not None:
+            if n_threads is None:
                 config = tf.ConfigProto(allow_soft_placement=True)
             else:
                 config = tf.ConfigProto(intra_op_parallelism_threads=n_threads,
