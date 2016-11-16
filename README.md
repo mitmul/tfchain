@@ -77,15 +77,13 @@ To visualize your Chainer model using tensorboard, just adding the below line fo
 tf.train.SummaryWriter('data', graph=model.session.graph)
 ```
 
-It creates `data` dir, so at the place the dir created, just launch tensorboard:
+And before running the script (e.g., `examples/mnist.py` or `examples/vgg16.py`), please launch the tensorboard first by:
 
 ```
 $ tensorboard --logdir=$PWD
 ```
 
-where the path `$PWD` should have `data` dir.
-
-Then go to `GRAPHS` tag, and enjoy the visualized graph.
+Then run an example script, it will create `data` dir. Open your browser and go to `http://localhost:6006` then click the `GRAPHS` tab, and enjoy the visualization result.
 
 ### Chainer model visualization examples
 

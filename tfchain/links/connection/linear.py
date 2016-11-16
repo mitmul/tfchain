@@ -12,7 +12,8 @@ class Linear(tfchain.Link):
     def forward(self, x):
         if isinstance(x, tf.Tensor):
             shape = x.get_shape()
-            x = tf.reshape(x, (int(shape[0]), int(np.prod(shape[1:]))))
+            if len(shape) != 2:
+                x = tf.reshape(x, (int(shape[0]), int(np.prod(shape[1:]))))
         elif isinstance(x, chainer.Variable):
             shape = x.shape
             x = x.reshape((shape[0], np.prod(shape[1:])))
