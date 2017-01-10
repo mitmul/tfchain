@@ -15,17 +15,18 @@ Alternative Chain implementation with TensorFlow backend
 export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.11.0rc2-cp35-cp35m-linux_x86_64.whl
 pip install --upgrade -I setuptools
 pip install --upgrade $TF_BINARY_URL
+python setup.py install
 ```
 
 # Run tests
 
-```
+```bash
 nosetests -s tests
 ```
 
 # Run a MNIST example
 
-```
+```bash
 python examples/mnist.py
 ```
 
@@ -33,7 +34,7 @@ python examples/mnist.py
 
 Just give a decorator `@totf` to the member function `__call__` of your model class that inherits from `chainer.Chain`. The following example is from `examples/mnist.py`, and it shows how to use TensorFlow for all computations performed inside the `__call__` function:
 
-```
+```py
 class LeNet5(chainer.Chain):
 
     def __init__(self):
@@ -60,7 +61,7 @@ Don't miss the `@totf` decorator right before the `__call__` method definition.
 
 Then, just give a `chainer.Variable` to the model object as usual, it runs on TensorFlow.
 
-```
+```py
 x = ...  # Prepare the input variable as a numpy array
 model = LeNet5()
 x = chainer.Variable(x)
@@ -73,13 +74,13 @@ The returned value `y` will be a numpy array.
 
 To visualize your Chainer model using tensorboard, just adding the below line following the model forward calculation part:
 
-```
+```py
 tf.train.SummaryWriter('data', graph=model.session.graph)
 ```
 
 And before running the script (e.g., `examples/mnist.py` or `examples/vgg16.py`), please launch the tensorboard first by:
 
-```
+```bash
 $ tensorboard --logdir=$PWD
 ```
 

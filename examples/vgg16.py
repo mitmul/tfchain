@@ -72,6 +72,7 @@ if __name__ == '__main__':
     x = np.random.randn(1, 3, 224, 224).astype(np.float32)
     y = model(chainer.Variable(x))
     print(y.shape)
-    tf.train.SummaryWriter('data', graph=model.session.graph)
+    writer = tf.train.SummaryWriter('data', graph=model.session.graph)
+    writer.flush()
     if hasattr(model, 'session'):
         model.session.close()
